@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", serif;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background-color: #F0F0F0;
+        }
+
+        .main {
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .nav {
+            padding: 10px 20px;
+            background-color: #F0F0F0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav a{
+            text-decoration: none;
+            background-color: #000000b8;
+            color: white;
+            padding: 8px 10px;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        .nav img {
+            width: 100px;
+        }
+
+        .ContactForm {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .input-container {
+            width: 450px;
+            background-color: #F0F0F0;
+            box-shadow: 0px 0px 20px #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .input-container input,
+        textarea {
+            padding: 8px 14px;
+            border: 1px solid #999;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .input-container label {
+            font-size: 14px;
+        }
+
+        .input-container textarea {
+            min-height: 25px;
+        }
+
+        .input-container button {
+            padding: 10px 14px;
+            background-color: #000000b8;
+            border-radius: 5px;
+            border: 1px solid #000000b8;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            color: white;
+        }
+
+        .error {
+            border-color: red;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.875em;
+            margin-top: 1px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="nav">
+            <div>
+                <img src="./assets/j.png" alt="">
+            </div>
+            <a href="tel:+916264965313">6264965313</a>
+        </div>
+        <div class="ContactForm">
+            <div class="input-container">
+                <label for="fullname">Name</label>
+                <input id="fullname" type="text" placeholder="Enter Your full name..." />
+                <span class="error-message" id="fullname-error"></span>
+
+                <label for="email">Email</label>
+                <input id="email" type="email" placeholder="Enter Your email..." />
+                <span class="error-message" id="email-error"></span>
+
+                <label for="phone">Contact Number</label>
+                <input id="phone" minlength="10" maxlength="10" pattern="\d{10}" type="number"
+                    placeholder="Enter Your phone number..." />
+                <span class="error-message" id="phone-error"></span>
+
+                <label for="address">Address</label>
+                <textarea id="address" placeholder="Enter Your address..."></textarea>
+                <span class="error-message" id="address-error"></span>
+
+                <label for="pincode">Pincode</label>
+                <input id="pincode" type="number" minlength="6" maxlength="6" pattern="\d{6}"
+                    placeholder="Enter Your pincode..." />
+                <span class="error-message" id="pincode-error"></span>
+
+                <button id="submitBTN" class="submitBTN">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const handleSubmit = async () => {
+            const fullname = document.getElementById("fullname");
+            const email = document.getElementById("email");
+            const phone = document.getElementById("phone");
+            const address = document.getElementById("address");
+            const pincode = document.getElementById("pincode");
+
+            const fullnameError = document.getElementById("fullname-error");
+            const emailError = document.getElementById("email-error");
+            const phoneError = document.getElementById("phone-error");
+            const addressError = document.getElementById("address-error");
+            const pincodeError = document.getElementById("pincode-error");
+
+            let isValid = true;
+
+            const fields = [fullname, email, phone, address, pincode];
+            const errors = [fullnameError, emailError, phoneError, addressError, pincodeError];
+
+            fields.forEach(field => field.classList.remove("error"));
+            errors.forEach(error => error.textContent = "");
+
+            if (!fullname.value.trim()) {
+                fullname.classList.add("error");
+                fullnameError.textContent = "Name is required.";
+                isValid = false;
+            }
+
+            if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+                email.classList.add("error");
+                emailError.textContent = "Valid email is required.";
+                isValid = false;
+            }
+
+            if (!phone.value.trim() || !/^[0-9]{10}$/.test(phone.value.trim())) {
+                phone.classList.add("error");
+                phoneError.textContent = "Phone number must be 10 digits.";
+                isValid = false;
+            }
+
+            if (!address.value.trim()) {
+                address.classList.add("error");
+                addressError.textContent = "Address is required.";
+                isValid = false;
+            }
+
+            if (!pincode.value.trim() || !/^[0-9]{6}$/.test(pincode.value.trim())) {
+                pincode.classList.add("error");
+                pincodeError.textContent = "Pincode must be 6 digits.";
+                isValid = false;
+            }
+
+            if (!isValid) {
+                return;
+            }
+
+            const data = {
+                "Full Name": fullname.value.trim(),
+                "Email": email.value.trim(),
+                "Phone": phone.value.trim(),
+                "Address": address.value.trim(),
+                "Pincode": pincode.value.trim(),
+            };
+
+            try {
+                const submitBTN = document.getElementById("submitBTN");
+                submitBTN.disabled = true;
+                submitBTN.textContent = "Submitting...";
+
+                const response = await fetch("https://v1.nocodeapi.com/sundramj_fullstack/google_sheets/tCzgzQeJnFMhLSWD?tabId=Sheet1", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify([Object.values(data)]),
+                });
+
+                if (response.ok) {
+                    setTimeout(() => {
+                        window.location.href = "https://sundram-jatav-portfolio.vercel.app/"
+                    }, 3000)
+                    fields.forEach(field => field.value = "");
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Form submitted successfully!',
+                        confirmButtonText: 'OK'
+                    });
+                    fields.forEach(field => field.value = "");
+                    window.location.href = "https://sundram-jatav-portfolio.vercel.app/";
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to submit form. Please try again.',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            } catch (error) {
+                console.error("Error submitting form:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while submitting the form.',
+                    confirmButtonText: 'OK'
+                });
+            } finally {
+                const submitBTN = document.getElementById("submitBTN");
+                submitBTN.disabled = false;
+                submitBTN.textContent = "Submit";
+            }
+        };
+
+        phone.addEventListener("input", () => {
+            if (phone.value.length > 10) phone.value = phone.value.slice(0, 10);
+        });
+
+        pincode.addEventListener("input", () => {
+            if (pincode.value.length > 6) pincode.value = pincode.value.slice(0, 6);
+        });
+        document.getElementById("submitBTN").addEventListener("click", handleSubmit);
+    </script>
+</body>
+
+</html>
